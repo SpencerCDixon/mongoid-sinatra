@@ -1,11 +1,13 @@
 require 'rspec'
 require 'rack/test'
+require 'sidekiq/testing'
 require 'pry'
 require File.expand_path '../../server.rb', __FILE__
 
 ENV['RACK_ENV'] = 'test'
 
 Mongoid.load!("mongoid.yml", :test)
+Sidekiq::Testing.fake!
 
 module RSpecMixin
   include Rack::Test::Methods
@@ -19,5 +21,10 @@ RSpec.configure do |config|
   # DB Cleaner for Mongoid tests
   config.before do
     Mongoid.purge!
+  end
+
+  # Clear all sidekiq workers before tests
+  config.before(:each) do
+    Sidekiq::Worker.clear_all
   end
 end

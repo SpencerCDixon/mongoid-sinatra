@@ -4,4 +4,5 @@ require 'pry'
 
 describe SyncJob do
   it "has a pending test"
+  it "is associated to different things and has specific columns"
 end

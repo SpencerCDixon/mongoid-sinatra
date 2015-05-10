@@ -10,8 +10,14 @@ class SyncJobStarter
     if sj
       { error: 'Job already started' }.to_json
     else
-      SyncJob.create(start_time: Time.now, job_id: @syncable_id, sync_type: @syncable_type)
-      { success: 'Created a new SyncJob' }.to_json
+      id = FullSyncWorker.perform_async("some message")
+      sj = SyncJob.create(start_time: id, job_id: @syncable_id, sync_type: @syncable_type)
+
+      { success: 'Created a new SyncJob',
+        sidekiq_jid: sj[:start_time],
+        sync_id: sj[:job_id],
+        sync_type: sj[:sync_type]
+        }.to_json
     end
   end
 
