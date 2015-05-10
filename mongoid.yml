@@ -1,9 +1,23 @@
 development:
   sessions:
     default:
-      database: cms
+      database: sync_jobs
       hosts:
         - localhost:27017
+  options:
+    raise_not_found_error: false
+    use_activesupport_time_zone: true
+    use_utc: false
+test:
+  sessions:
+    default:
+      database: sync_jobs_test
+      hosts:
+        - localhost:27017
+  options:
+    raise_not_found_error: false
+    use_activesupport_time_zone: true
+    use_utc: false
 # production:
   # sessions:
     # default:
