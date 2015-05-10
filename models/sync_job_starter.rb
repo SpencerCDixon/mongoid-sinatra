@@ -22,10 +22,10 @@ class SyncJobStarter
   end
 
   def current_status
-    sj = SyncJob.find_by(job_id: @id, sync_type: @type)
+    sj = SyncJob.find_by(job_id: @syncable_id, sync_type: @syncable_type)
 
     if sj
-      { job_id: @id, sync_type: @type, status: sj[:job_status] }.to_json
+      { job_id: @syncable_id, sync_type: @syncable_type, status: sj[:job_status] }.to_json
     else
       { error: 'No jobs started' }.to_json
     end

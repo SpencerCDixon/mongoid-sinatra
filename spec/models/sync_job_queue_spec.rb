@@ -20,4 +20,24 @@ describe SyncJobStarter do
       end
     end
   end
+
+  describe "#start" do
+    context "no job has been started" do
+      it "starts a new job" do
+        expect(FullSyncWorker.jobs.size).to eq 0
+        SyncJobStarter.new('practice', 100).start
+        expect(FullSyncWorker.jobs.size).to eq 1
+      end
+
+      it "creates a new Sync Job associated to the Sidekiq job" do
+        expect(SyncJobStarter.new('practice', 100).start).to eq(
+          { success: 'Created a new SyncJob',
+            sidekiq_jid: FullSyncWorker.jobs.last["jid"],
+            sync_id: "100",
+            sync_type: 'practice'
+            }.to_json
+        )
+      end
+    end
+  end
 end
